@@ -144,7 +144,7 @@ export default function Home() {
           </p>
         </section>
         <section>
-          {activeTab === "trailer" && <TrailerCard youtubeId={YOUTUBE_ID} />}
+          {activeTab === "trailer" && <PCTestCard />}
           {activeTab === "about" && <AboutCard />}
           {unlocked && activeTab === "pc" && <PCTestCard />}
         </section>
