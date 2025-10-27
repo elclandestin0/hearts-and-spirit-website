@@ -41,8 +41,7 @@ export default function Home() {
     <div className="min-h-svh flex flex-col text-slate-100 bg-[radial-gradient(1200px_800px_at_50%_-10%,#111626_0%,#0b0c0f_50%,#06070a_100%)]">
       {/* Header */}
       <header
-        // single source of truth for header height
-        style={{ ["--header-h" as any]: "110px" }}
+        // single source of truth for header height 
         className="sticky top-0 z-40 border-b border-slate-800/60 backdrop-blur-md bg-slate-900/40 [isolation:isolate] h-[var(--header-h)]"
       >
         <div className="relative max-w-5xl mx-auto h-full px-4 flex items-center justify-between gap-3">
