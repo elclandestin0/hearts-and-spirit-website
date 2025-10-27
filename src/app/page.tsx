@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import GlowyTitle from "@/components/GlowyTitle";
+import UnityBuild from "@/components/ui/UnityBuild";
 
 const YOUTUBE_ID = "dQw4w9WgXcQ"; // TODO: replace with real trailer ID
 
@@ -13,6 +14,8 @@ export default function Home() {
     "trailer"
   );
   const timerRef = useRef<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
 
   // Secret triple-tap logic
   useEffect(() => {
@@ -25,86 +28,127 @@ export default function Home() {
     }
     if (timerRef.current) window.clearTimeout(timerRef.current);
     timerRef.current = window.setTimeout(() => setClicks(0), 1200);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [clicks]);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+  }, [menuOpen]);
+
   return (
-    <div className="min-h-screen text-slate-100 bg-[radial-gradient(1200px_800px_at_50%_-10%,#111626_0%,#0b0c0f_50%,#06070a_100%)]">
+    <div className="min-h-svh flex flex-col text-slate-100 bg-[radial-gradient(1200px_800px_at_50%_-10%,#111626_0%,#0b0c0f_50%,#06070a_100%)]">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-slate-800/60 backdrop-blur-md bg-slate-900/40 [isolation:isolate]">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <header
+        // single source of truth for header height
+        style={{ ["--header-h" as any]: "110px" }}
+        className="sticky top-0 z-40 border-b border-slate-800/60 backdrop-blur-md bg-slate-900/40 [isolation:isolate] h-[var(--header-h)]"
+      >
+        <div className="relative max-w-5xl mx-auto h-full px-4 flex items-center justify-between gap-3">
           {/* Brand + glowy title */}
           <div className="flex items-center gap-3 min-w-0">
-            {/* <span className="w-3.5 h-3.5 shrink-0 rounded-full shadow-[0_0_24px_#6ee7ff] bg-[radial-gradient(circle_at_30%_30%,#fff,#6ee7ff)]" /> */}
-            <div className="truncate leading-none">
+            <div className="leading-none">
               <GlowyTitle
                 text="Hearts & Spirit"
-                className="text-[18px] sm:text-[22px] leading-none"
+                className="block leading-none text-[calc(var(--header-h)*0.28)] sm:text-[calc(var(--header-h)*0.32)]"
               />
             </div>
           </div>
 
-          {/* Tabs */}
-          <nav className="flex items-center gap-1">
-            <TabButton
-              label="Trailer"
-              active={activeTab === "trailer"}
-              onClick={() => setActiveTab("trailer")}
-            />
-            <TabButton
-              label="About"
-              active={activeTab === "about"}
-              onClick={() => setActiveTab("about")}
-            />
+          {/* Desktop tabs */}
+          <nav className="hidden sm:flex items-center gap-1 self-end pb-3">
+            <TabButton label="Home" active={activeTab === "trailer"} onClick={() => setActiveTab("trailer")} />
+            {/* <TabButton label="About" active={activeTab === "about"} onClick={() => setActiveTab("about")} /> */}
             {unlocked && (
-              <TabButton
-                label="PC Test"
-                active={activeTab === "pc"}
-                onClick={() => setActiveTab("pc")}
-              />
+              <TabButton label="Demo" active={activeTab === "pc"} onClick={() => setActiveTab("pc")} />
             )}
           </nav>
+
+          {/* Mobile hamburger */}
+          <div className="sm:hidden self-center">
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+              className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-700/80 hover:border-sky-400/80"
+            >
+              <span className="relative inline-block w-5 h-5">
+                <span className={`absolute left-0 top-1 block h-0.5 w-5 bg-slate-200 transition-transform ${menuOpen ? "translate-y-2 rotate-45" : ""}`} />
+                <span className={`absolute left-0 top-2.5 block h-0.5 w-5 bg-slate-200 transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"}`} />
+                <span className={`absolute left-0 top-4 block h-0.5 w-5 bg-slate-200 transition-transform ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
+              </span>
+            </button>
+          </div>
+
+          {/* Mobile menu panel */}
+          {menuOpen && (
+            <>
+              {/* click-away overlay */}
+              <button
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+                className="fixed inset-0 z-[-1] cursor-default bg-black/0"
+              />
+              <div
+                className="absolute right-4 top-[calc(var(--header-h)-8px)] sm:hidden min-w-[180px]
+                     rounded-xl border border-slate-800 bg-slate-900/95 backdrop-blur-md shadow-lg"
+                role="menu"
+              >
+                <ul className="py-2">
+                  <li>
+                    <button
+                      role="menuitem"
+                      onClick={() => { setActiveTab("trailer"); setMenuOpen(false); }}
+                      className="w-full text-left px-3 py-2 text-slate-200 hover:bg-slate-800/60"
+                    >
+                      Home
+                    </button>
+                  </li>
+                  {/* <li>
+                    <button
+                      role="menuitem"
+                      onClick={() => { setActiveTab("about"); setMenuOpen(false); }}
+                      className="w-full text-left px-3 py-2 text-slate-200 hover:bg-slate-800/60"
+                    >
+                      About
+                    </button>
+                  </li> */}
+                  {unlocked && (
+                    <li>
+                      <button
+                        role="menuitem"
+                        onClick={() => { setActiveTab("pc"); setMenuOpen(false); }}
+                        className="w-full text-left px-3 py-2 text-slate-200 hover:bg-slate-800/60"
+                      >
+                        Demo
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </>
+          )}
         </div>
       </header>
-
       {/* Hero */}
       <main className="max-w-5xl mx-auto px-4 py-10">
         <section className="mb-8">
-          <div className="mb-2 uppercase tracking-[.14em] text-xs text-sky-300">
-            Momentum Flight • Spherical World • Dove Companion
-          </div>
           <h1 className="text-3xl sm:text-4xl font-semibold">
-            Glide, dive, and explore a tiny world in VR
+            {activeTab === "trailer" && 'Soar with Love'}
+            {activeTab === "pc" && 'Demo'}
           </h1>
           <p className="text-slate-300/80 mt-3 max-w-2xl">
-            A serene, momentum-based flying demo with Arkham-style gliding and Wind Waker vibes.
-            Built for Quest/PCVR. Minimal, focused, cozy.
-          </p>
-          <div className="flex gap-2 mt-4 flex-wrap">
-            <a
-              className="inline-flex items-center rounded-xl px-4 py-2 bg-slate-100 text-slate-900 font-semibold hover:bg-slate-200"
-              href={`https://www.youtube-nocookie.com/watch?v=${YOUTUBE_ID}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Watch Trailer
-            </a>
-            <button
-              className="inline-flex items-center rounded-xl px-4 py-2 border border-slate-700 text-slate-200 hover:border-sky-400"
-              onClick={() => setActiveTab("about")}
-            >
-              Learn More
-            </button>
-          </div>
-        </section>
+            {activeTab === "trailer" && 'Flap, glide, dive and hover your way around with Dovina as you discover the parables of Love.'}
+            {activeTab === "pc" && 'This is available only to grantors and other interested parties.'}
 
-        {/* Tabs */}
+          </p>
+        </section>
         <section>
           {activeTab === "trailer" && <TrailerCard youtubeId={YOUTUBE_ID} />}
           {activeTab === "about" && <AboutCard />}
           {unlocked && activeTab === "pc" && <PCTestCard />}
         </section>
-
-        {/* Secret seed (click 3x) */}
         <button
           aria-label="seed"
           onClick={() => setClicks((c) => c + 1)}
@@ -117,14 +161,13 @@ export default function Home() {
           ].join(" ")}
         />
       </main>
-
       {/* Footer */}
-      <footer className="border-t border-slate-800/60 bg-slate-900/40">
+      <footer className="border-t border-slate-800/60 bg-slate-900/40 mt-auto">
         <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-slate-400">
             <span className="w-2.5 h-2.5 rounded-full bg-[radial-gradient(circle_at_30%_30%,#fff,#6ee7ff)] shadow-[0_0_18px_#6ee7ff]" />
             <span className="text-sm">
-              © {new Date().getFullYear()} Hearts & Spirit
+              © {new Date().getFullYear()} SEEYUF Studios
             </span>
           </div>
           <div className="flex items-center gap-3 text-sm text-slate-400 flex-wrap">
@@ -133,7 +176,6 @@ export default function Home() {
             <FooterLink href="https://instagram.com/YOURHANDLE" label="Instagram" />
             <FooterLink href="https://reddit.com/r/YOURSUB" label="Reddit" />
             <FooterLink href="https://itch.io/profile/YOURPAGE" label="Itch.io" />
-            <FooterLink href="mailto:hello@example.com" label="Email" />
           </div>
         </div>
       </footer>
@@ -169,20 +211,17 @@ function TabButton({
 
 function TrailerCard({ youtubeId }: { youtubeId: string }) {
   return (
-    <div className="bg-slate-900/40 border border-slate-800/70 rounded-2xl shadow-[inset_0_10px_30px_rgba(0,0,0,0.35),0_6px_20px_rgba(0,0,0,0.25)]">
-      <div className="p-4">
-        <h2 className="text-slate-100 text-lg font-semibold mb-3">Trailer</h2>
-        <div className="aspect-video w-full overflow-hidden rounded-xl border border-slate-800 bg-black">
-          <iframe
-            className="w-full h-full"
-            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0`}
-            title="VR Demo Trailer"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
-        </div>
+    <div className="bg-slate-900/40 rounded-2xl shadow-[inset_0_10px_30px_rgba(0,0,0,0.35),0_6px_20px_rgba(0,0,0,0.25)]">
+      <div className="aspect-video w-full overflow-hidden rounded-xl border border-slate-800 bg-black">
+        <iframe
+          className="w-full h-full"
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0`}
+          title="Home"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
       </div>
     </div>
   );
@@ -218,39 +257,7 @@ function AboutCard() {
 function PCTestCard() {
   return (
     <div className="mt-6 bg-emerald-900/10 border border-emerald-800/50 rounded-2xl">
-      <div className="p-4">
-        <h2 className="text-emerald-200 text-lg font-semibold mb-2">
-          PC Test (Unlocked)
-        </h2>
-        <div className="grid gap-3">
-          <p className="text-emerald-200/90 leading-7">
-            This tab appears after the hidden seed is tapped three times. It
-            links to a lightweight PC build for investors & creators.
-          </p>
-          <div className="flex gap-2 flex-wrap">
-            {/* TODO: Replace with your real hosted link */}
-            <a
-              className="inline-flex items-center rounded-xl px-4 py-2 bg-emerald-300 text-emerald-950 font-semibold hover:bg-emerald-200"
-              href="/builds/pc-demo.zip"
-              download
-            >
-              Download PC Demo (Zip)
-            </a>
-            <a
-              className="inline-flex items-center rounded-xl px-4 py-2 border border-emerald-800 text-emerald-100 hover:border-emerald-400"
-              href="/webgl/index.html"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open Web Preview
-            </a>
-          </div>
-          <p className="text-xs text-emerald-200/60">
-            Note: This is a keyboard/mouse fly-through for scene lookdev, not
-            the final VR feel.
-          </p>
-        </div>
-      </div>
+      <UnityBuild />
     </div>
   );
 }

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: 'Hearts & Spirit — VR Demo',
-  description: 'Glide, dive, explore a tiny spherical world.',
+  description: 'Soar with Love',
   openGraph: {
     title: 'Hearts & Spirit — VR Demo',
     description: 'Momentum VR flight on a cozy world.',
