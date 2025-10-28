@@ -28,9 +28,8 @@ export default function UnityBuild() {
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Button
-          variant="outline"
           size="sm"
-          className="text-black hover:text-black dark:text-black"
+          className="text-emerald-900/20 hover:text-black dark:text-black bg-emerald-900/20 border-[#FFF385] text-white hover:text-black hover:bg-[#FFF385]"
           onClick={() => requestFullscreen(true)}
         >
           Fullscreen

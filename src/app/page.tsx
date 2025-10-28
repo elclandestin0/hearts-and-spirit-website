@@ -42,7 +42,7 @@ export default function Home() {
       {/* Header */}
       <header
         // single source of truth for header height 
-        className="sticky top-0 z-40 border-b border-slate-800/60 backdrop-blur-md bg-slate-900/40 [isolation:isolate] h-[var(--header-h)]"
+        className="sticky top-0 z-40 border-b border-slate-800/60 backdrop-blur-md bg-emerald-900/20 [isolation:isolate] h-[var(--header-h)]"
       >
         <div className="relative max-w-5xl mx-auto h-full px-4 flex items-center justify-between gap-3">
           {/* Brand + glowy title */}
@@ -161,8 +161,8 @@ export default function Home() {
         />
       </main>
       {/* Footer */}
-      <footer className="border-t border-slate-800/60 bg-slate-900/40 mt-auto">
-        <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="border-t border-slate-800/60 bg-emerald-900/20 mt-auto">
+        <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-2 text-slate-400">
             <span className="w-2.5 h-2.5 rounded-full bg-[radial-gradient(circle_at_30%_30%,#fff,#6ee7ff)] shadow-[0_0_18px_#6ee7ff]" />
             <span className="text-sm">
@@ -197,10 +197,10 @@ function TabButton({
     <button
       onClick={onClick}
       className={[
-        "px-3 py-1.5 rounded-xl text-sm font-semibold transition border",
+        "px-3 py-1.5 rounded-xl text-sm font-semibold transition border border-[#FFF385]",
         active
-          ? "bg-slate-100 text-slate-900 border-transparent"
-          : "bg-transparent text-slate-200 border-slate-700 hover:border-sky-400",
+          ? "bg-[#FFF385] text-slate-900 text-emerald-900/20"
+          : "bg-transparent text-[#FFF385] hover:bg-[#FFF385]"
       ].join(" ")}
     >
       {label}
@@ -255,7 +255,7 @@ function AboutCard() {
 
 function PCTestCard() {
   return (
-    <div className="mt-6 bg-emerald-900/10 border border-emerald-800/50 rounded-2xl">
+    <div className="mt-6 border border-emerald-800/50 rounded-2xl">
       <UnityBuild />
       <div className="px-4 pb-4">
         <ControlsCard />
@@ -265,7 +265,7 @@ function PCTestCard() {
 }
 
 function ControlsCard() {
-  const rows: Array<{key: string; action: string}> = [
+  const rows: Array<{ key: string; action: string }> = [
     { key: "Mouse / Touch Pad", action: "Look around" },
     { key: "F", action: "Flap" },
     { key: "M", action: "Glide" },
@@ -276,12 +276,12 @@ function ControlsCard() {
   return (
     <div className="mt-4 rounded-xl border border-emerald-800/50 bg-emerald-900/20">
       <div className="p-4">
-        <h3 className="text-emerald-200 font-semibold mb-2">Keyboard & Mouse Controls</h3>
+        <h3 className="text-white font-semibold mb-2">Keyboard & Mouse Controls</h3>
         <ul className="grid grid-cols-1 gap-x-6 gap-y-2 text-sm">
           {rows.map(({ key, action }) => (
             <li key={key} className="flex items-center justify-between gap-3">
-              <span className="text-emerald-200/90 font-medium">{key}</span>
-              <span className="text-emerald-100/80">{action}</span>
+              <span className="text-white font-medium">{key}</span>
+              <span className="text-emerald-200/90">{action}</span>
             </li>
           ))}
         </ul>
