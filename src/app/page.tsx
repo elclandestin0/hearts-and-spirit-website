@@ -56,7 +56,7 @@ export default function Home() {
           </div>
 
           {/* Desktop tabs */}
-          <nav className="hidden sm:flex items-center gap-1 self-end pb-3">
+          <nav className="hidden sm:flex items-center gap-1 self-end pb-3 pt-3">
             <TabButton label="Home" active={activeTab === "trailer"} onClick={() => setActiveTab("trailer")} />
             {/* <TabButton label="About" active={activeTab === "about"} onClick={() => setActiveTab("about")} /> */}
             {unlocked && (
