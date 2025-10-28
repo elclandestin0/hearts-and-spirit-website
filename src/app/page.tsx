@@ -56,7 +56,7 @@ export default function Home() {
           </div>
 
           {/* Desktop tabs */}
-          <nav className="hidden sm:flex items-center gap-1 self-end pb-3 pt-3">
+          <nav className="hidden sm:flex items-center gap-1 self-end pb-4 pt-4">
             <TabButton label="Home" active={activeTab === "trailer"} onClick={() => setActiveTab("trailer")} />
             {/* <TabButton label="About" active={activeTab === "about"} onClick={() => setActiveTab("about")} /> */}
             {unlocked && (
@@ -257,8 +257,37 @@ function PCTestCard() {
   return (
     <div className="mt-6 bg-emerald-900/10 border border-emerald-800/50 rounded-2xl">
       <UnityBuild />
+      <div className="px-4 pb-4">
+        <ControlsCard />
+      </div>
     </div>
   );
+}
+
+function ControlsCard() {
+  const rows: Array<{key: string; action: string}> = [
+    { key: "Mouse / Touch Pad", action: "Look around" },
+    { key: "F", action: "Flap" },
+    { key: "M", action: "Glide" },
+    { key: "N", action: "Hover" },
+    { key: "C", action: "Attract seeds nearby" },
+    { key: "X", action: "Launch seeds" },
+  ]
+  return (
+    <div className="mt-4 rounded-xl border border-emerald-800/50 bg-emerald-900/20">
+      <div className="p-4">
+        <h3 className="text-emerald-200 font-semibold mb-2">Keyboard & Mouse Controls</h3>
+        <ul className="grid grid-cols-1 gap-x-6 gap-y-2 text-sm">
+          {rows.map(({ key, action }) => (
+            <li key={key} className="flex items-center justify-between gap-3">
+              <span className="text-emerald-200/90 font-medium">{key}</span>
+              <span className="text-emerald-100/80">{action}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
 }
 
 function FooterLink({ href, label }: { href: string; label: string }) {

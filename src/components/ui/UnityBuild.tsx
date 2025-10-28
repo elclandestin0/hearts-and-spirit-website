@@ -1,5 +1,6 @@
 "use client";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import { Button } from "@/components/ui/button";
 
 export default function UnityBuild() {
   const { unityProvider, loadingProgression, sendMessage, requestFullscreen } =
@@ -14,19 +15,27 @@ export default function UnityBuild() {
     });
 
   return (
-    <div>
+    <div className="p-4">
       <div style={{ width: "100%", aspectRatio: "16/9" }}>
         <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100%" }} />
       </div>
 
       {loadingProgression < 1 && (
-        <p>Loading… {Math.round(loadingProgression * 100)}%</p>
+        <p className="mt-3 text-sm text-slate-300/80">
+          Loading… {Math.round(loadingProgression * 100)}%
+        </p>
       )}
 
-      <button onClick={() => requestFullscreen(true)}>Fullscreen</button>
-      <button onClick={() => sendMessage("Bridge", "OnPing", "Hi!")}>
-        SendMessage
-      </button>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-black hover:text-black dark:text-black"
+          onClick={() => requestFullscreen(true)}
+        >
+          Fullscreen
+        </Button>
+      </div>
     </div>
   );
 }
